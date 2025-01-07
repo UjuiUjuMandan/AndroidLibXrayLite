@@ -30,6 +30,7 @@ jobs:
     - name: Install gomobile
       run: |
         go install github.com/sagernet/gomobile/cmd/gomobile@latest
+        go install github.com/sagernet/gomobile/cmd/gobind@latest
         export PATH=$PATH:~/go/bin
       
     - name: Setup Java
