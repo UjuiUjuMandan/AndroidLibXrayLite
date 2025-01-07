@@ -29,7 +29,7 @@ jobs:
 
     - name: Install gomobile
       run: |
-        go install github.com/UjuiUjuMandan/gomobile/cmd/gomobile@0c7354fa0b9c0aa3a37f9859694f9d856d7deda6
+        go install github.com/sagernet/gomobile/cmd/gomobile@latest
         export PATH=$PATH:~/go/bin
       
     - name: Setup Java

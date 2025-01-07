@@ -54,4 +54,4 @@ require (
 	lukechampine.com/blake3 v1.3.0 // indirect
 )
 
-replace github.com/sagernet/gomobile v0.1.4 => github.com/UjuiUjuMandan/gomobile v0.0.0-20250107035559-0c7354fa0b9c
+replace github.com/sagernet/gomobile v0.1.4 => github.com/ujuiujumandan/gomobile v0.0.0-20250107040122-81c657749b26
