@@ -13,7 +13,22 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Setup Android NDK
+      uses: nttld/setup-ndk@v1
+      id: setup-ndk
+      with:
+        ndk-version: r27
+        add-to-path: true
+        link-to-sdk: true
+        local-cache: true
+
     - name: Setup Golang
       uses: actions/setup-go@v5
       with:
@@ -29,15 +44,6 @@ jobs:
       run: |
         CGO_ENABLED=0 go install -trimpath -ldflags="-w -s" golang.org/x/mobile/cmd/gomobile@latest
         export PATH=$PATH:~/go/bin
-        
-    - name: Setup Android NDK
-      uses: nttld/setup-ndk@v1
-      id: setup-ndk
-      with:
-        ndk-version: r27
-        add-to-path: true
-        link-to-sdk: true
-        local-cache: true
 
     - name: Restore Android Symlinks
       run: |
