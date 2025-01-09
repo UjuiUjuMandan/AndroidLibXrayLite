@@ -5,5 +5,6 @@ binary*.go
 conf/demo/
 
 demo/
+data/
 assets/
 libv2ray*.[a|j]ar

@@ -27,7 +27,7 @@ jobs:
 
     - name: Install gomobile
       run: |
-        CGO_ENABLED=0 go install -trimpath -ldflags="-w -s" golang.org/x/mobile/cmd/gomobile@latest
+        go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20241213221354-a87c1cf6cf46
         export PATH=$PATH:~/go/bin
         
     - name: Setup Android NDK
@@ -54,9 +54,9 @@ jobs:
          mkdir -p assets data
          bash gen_assets.sh download
          cp -v data/*.dat assets/
+         go mod download
          gomobile init
-         go mod tidy
-         gomobile bind -v -androidapi 21 -trimpath -ldflags='-s -w -buildid=' ./
+         gomobile bind -v -androidapi 21 -trimpath -ldflags='-buildid=' -trimpath
       env:
         ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
