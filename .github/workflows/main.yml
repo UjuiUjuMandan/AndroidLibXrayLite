@@ -14,30 +14,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
+    - name: Setup Golang
+      uses: actions/setup-go@v5
       with:
-        distribution: 'temurin'
-        java-version: '21'
+        go-version-file: 'go.mod'
 
-    - name: Clean up JDKs
+    - name: Patch Go use 600296
+      #https://go-review.googlesource.com/c/go/+/600296
       run: |
-        KEEP_VERSION="21"
-        JAVA_HOME_BASE="/usr/lib/jvm"
-        echo "Keeping Java version $KEEP_VERSION"
-        for dir in "$JAVA_HOME_BASE"/*; do
-          if [[ -d "$dir" && "$dir" != *"$KEEP_VERSION"* ]]; then
-            echo "Removing $dir"
-            sudo rm -rf "$dir"
-          else
-            echo "Keeping $dir"
-          fi
-        done
-        echo "Remaining JDKs:"
-        ls -d "$JAVA_HOME_BASE"/*
+       cd "$(go env GOROOT)"
+       curl "https://go-review.googlesource.com/changes/go~600296/revisions/5/patch" | base64 -d | patch --verbose -p 1
 
-    - name: Setup Android environment
-      uses: android-actions/setup-android@v3
+    - name: Install gomobile
+      run: |
+        go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20241213221354-a87c1cf6cf46
+        export PATH=$PATH:~/go/bin
 
     - name: Setup Android NDK
       uses: nttld/setup-ndk@v1
@@ -57,22 +48,6 @@ jobs:
             ln -sf "$new_target" "$link"
             echo "Changed $(basename "$link") from $current_target to $new_target"
         done
-
-    - name: Setup Golang
-      uses: actions/setup-go@v5
-      with:
-        go-version-file: 'go.mod'
-
-    - name: Patch Go use 600296
-      #https://go-review.googlesource.com/c/go/+/600296
-      run: |
-       cd "$(go env GOROOT)"
-       curl "https://go-review.googlesource.com/changes/go~600296/revisions/5/patch" | base64 -d | patch --verbose -p 1
-
-    - name: Install gomobile
-      run: |
-        go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20241213221354-a87c1cf6cf46
-        export PATH=$PATH:~/go/bin
 
     - name: Build
       run: |
