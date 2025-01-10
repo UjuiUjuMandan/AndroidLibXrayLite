@@ -20,6 +20,22 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: Clean up JDKs
+      run: |
+        KEEP_VERSION="21"
+        JAVA_HOME_BASE="/usr/lib/jvm"
+        echo "Keeping Java version $KEEP_VERSION"
+        for dir in "$JAVA_HOME_BASE"/*; do
+          if [[ -d "$dir" && "$dir" != *"$KEEP_VERSION"* ]]; then
+            echo "Removing $dir"
+            sudo rm -rf "$dir"
+          else
+            echo "Keeping $dir"
+          fi
+        done
+        echo "Remaining JDKs:"
+        ls -d "$JAVA_HOME_BASE"/*
+
     - name: Setup Android environment
       uses: android-actions/setup-android@v3
 
