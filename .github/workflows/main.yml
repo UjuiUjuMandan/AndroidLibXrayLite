@@ -30,15 +30,6 @@ jobs:
         go install golang.org/x/mobile/cmd/gomobile@v0.0.0-20241213221354-a87c1cf6cf46
         export PATH=$PATH:~/go/bin
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '21'
-
-    - name: Setup Android environment
-      uses: android-actions/setup-android@v3
-
     - name: Setup Android NDK
       uses: nttld/setup-ndk@v1
       id: setup-ndk
@@ -64,7 +55,7 @@ jobs:
          bash gen_assets.sh download
          cp -v data/*.dat assets/
          gomobile init
-         go mod download
+         go mod tidy
          gomobile bind -v -androidapi 21 -trimpath -ldflags='-s -w -buildid=' ./
       env:
         ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
